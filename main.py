@@ -11,6 +11,26 @@ to specify that spacific list. This was done to simplify the class/functions str
 
                        Process = [at,bt,ct,tat,wt]
 '''
+import threading
+
+
+def thread_distributor(process_list):
+    fcfs_scheduler = FCFS()
+    sjf_scheduler = SJF()
+    fcfs_scheduler.process_list = process_list
+    sjf_scheduler.process_list = process_list
+    t1 = threading.Thread(target=fcfs_scheduler.driver, args=())
+    t2 = threading.Thread(target=sjf_scheduler.driver, args=())
+ 
+    # starting thread 1
+    t1.start()
+    # starting thread 2
+    t2.start()
+ 
+    # wait until thread 1 is completely executed
+    t1.join()
+    # wait until thread 2 is completely executed
+    t2.join()
 
 class FCFS:
     def __init__(self):
@@ -18,6 +38,14 @@ class FCFS:
         self.AvgTAT = 0
         self.AvgWT = 0
         self.Gantt_Chart = 0
+
+    def driver(self):
+        self.findCompletionTime()
+        self.findTAT()
+        self.findWT()
+        self.findAvgTAT()
+        self.findAvgWT()
+        self.showData()
 
     def findCompletionTime(self):
         for i,p in enumerate(self.process_list):
@@ -63,6 +91,15 @@ class SJF:
         self.AvgTAT = 0
         self.AvgWT = 0
         self.Gantt_Chart = 0
+
+    def driver(self):
+        self.sort_process_list()  # Sorts processes according to Burst Time
+        self.findCompletionTime()
+        self.findTAT()
+        self.findWT()
+        self.findAvgTAT()
+        self.findAvgWT()
+        self.showData([P1, P2, P3, P4])
 
     def sort_process_list(self):
         n = len(self.process_list) - 1
@@ -152,37 +189,16 @@ class SJF:
             print("Turn-around Time: ", p[3])
             print("Wait Time: ", p[4])
 
+
+
 if __name__ == "__main__":
-    sjf_scheduler = SJF()
 
     # Processes |  Arrival Time  |  Burst Time |
     P1          = [     1       ,       3     ]
     P2          = [     2       ,       4     ]
     P3          = [     1       ,       2     ]
     P4          = [     4       ,       4     ]
-    sjf_scheduler.process_list = [P1, P2, P3, P4]
+    thread_distributor([P1, P2, P3, P4])
 
-    sjf_scheduler.sort_process_list()  # Sorts processes according to Burst Time
-    sjf_scheduler.findCompletionTime()
-    sjf_scheduler.findTAT()
-    sjf_scheduler.findWT()
-    sjf_scheduler.findAvgTAT()
-    sjf_scheduler.findAvgWT()
-    sjf_scheduler.showData([P1, P2, P3, P4])
-
-
-    fcfs_scheduler = FCFS()
-
-    # Processes |  Arrival Time  |  Burst Time |
-    P1          = [     0       ,       5     ]
-    P2          = [     5       ,       7     ]
-    P3          = [     7       ,       3     ]
-    fcfs_scheduler.process_list = [P1, P2, P3]
-
-    fcfs_scheduler.findCompletionTime()
-    fcfs_scheduler.findTAT()
-    fcfs_scheduler.findWT()
-    fcfs_scheduler.findAvgTAT()
-    fcfs_scheduler.findAvgWT()
-    fcfs_scheduler.showData()
+    
     
