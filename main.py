@@ -2,12 +2,12 @@
 Author: Muhammad Mobeen
 Reg No: 200901097
 BS-CS-01  (B)
-Lab Task [7 DEC 2022]
+Lab Task [28 Dec 2022]
 Submitted to Mam Reeda Saeed
 
 Explaination of Task:-
 I have made a list of Processes and each process is made up of an individual list that contains the attributes
-to specify that spacific list. This was done to simplify the class/functions structure for the SJF Algorithm.
+to specify that spacific list. This was done to simplify the class/functions structure. Moreover I have implemented multi-threading
 
                        Process = [at,bt,ct,tat,wt]
 '''
